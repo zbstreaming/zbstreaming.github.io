@@ -1,1 +1,48 @@
-<meta http-equiv="refresh" content="0; url='https://youtu.be/vf2TwG0JrhA'" />
+
+<html>
+    <body style="background-color:#575e46;">
+        <!-- Wrapper -->
+        <div style="background-color:white; opacity: 85%; border-radius: 1rem; margin:2rem; padding:2rem">
+            <form id="inputform" style="margin-block-end: 0em;">
+                Password: <input name="input" id="myPass" type="password" />
+                <input type="button" id="myButton" onclick="enterPassword()" value="Submit">
+            </form>
+        </div>
+    </body>
+
+    <script>
+        var input = document.getElementById("inputform");
+        var password = "d82494f05d6917ba02f7aaa29689ccb444bb73f20380876cb05d1f37537b7892";
+        var redirectlink = "https://youtu.be/vf2TwG0JrhA"
+
+        input.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                document.getElementById("myButton").click();
+            }
+        });
+
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);                    
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));              
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
+        }
+
+        function enterPassword() { 
+            var val = document.getElementById("myPass").value;
+            console.log(val);
+
+            let hashed = sha256(val);
+            hashed.then(function(result) {
+                if (result === password) {
+                    window.location.replace(redirectlink);
+                } else {
+                    alert("Wrong password!!");
+                }
+            })
+            
+        };
+    </script>
+</html>
